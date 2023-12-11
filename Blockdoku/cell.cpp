@@ -5,7 +5,9 @@
 Cell::Cell()
 	: Entity()
 {
+	
 	this->addSprite("assets/blockSprite.tga");
+
 }
 
 Cell::~Cell()
