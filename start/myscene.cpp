@@ -1,64 +1,40 @@
 /**
- * This class describes MyScene behavior.
- *
  * Copyright 2015 Your Name <you@yourhost.com>
+ *
+ * @brief Description of My Awesome Game.
+ *
+ * @file main.cpp
+ *
+ * @mainpage My Awesome Game
+ *
+ * @section intro Introduction
+ *
+ * Detailed description of My Awesome Game.
+ *
+ * There's even a second paragraph.
  */
-
-#include <fstream>
-#include <sstream>
+#include <rt2d/core.h>
 
 #include "myscene.h"
 
-MyScene::MyScene() : Scene()
+/// @brief main entry point
+int main( void )
 {
-	// start the timer.
-	t.start();
+    // Core instance
+    Core core;
 
-	// create a single instance of MyEntity in the middle of the screen.
-	// the Sprite is added in Constructor of MyEntity.
-	myentity = new MyEntity();
-	myentity->position = Point2(SWIDTH/2, SHEIGHT/2);
+    // Scene01
+    MyScene* myscene = new MyScene(); // create Scene on the heap
+    while(myscene->isRunning()) { // check status of Scene every frame
+        core.run(myscene); // update and render the current scene
+        core.showFrameRate(5); // show framerate in output every n seconds
+    }
+    //core.cleanup(); // cleanup ResourceManager (Textures + Meshes, but not Shaders)
+    delete myscene; // delete Scene and everything in it from the heap to make space for next Scene
 
-	// create the scene 'tree'
-	// add myentity to this Scene as a child.
-	this->addChild(myentity);
-}
+    // No need to explicitly clean up the core.
+    // As a local var, core will go out of scope and destroy Renderer->ResourceManager.
+    // ResourceManager destructor also deletes Shaders.
 
-
-MyScene::~MyScene()
-{
-	// deconstruct and delete the Tree
-	this->removeChild(myentity);
-
-	// delete myentity from the heap (there was a 'new' in the constructor)
-	delete myentity;
-}
-
-void MyScene::update(float deltaTime)
-{
-	// ###############################################################
-	// Escape key stops the Scene
-	// ###############################################################
-	if (input()->getKeyUp(KeyCode::Escape)) {
-		this->stop();
-	}
-
-	// ###############################################################
-	// Spacebar scales myentity
-	// ###############################################################
-	if (input()->getKeyDown(KeyCode::Space)) {
-		myentity->scale = Point(0.5f, 0.5f);
-	}
-	if (input()->getKeyUp(KeyCode::Space)) {
-		myentity->scale = Point(1.0f, 1.0f);
-	}
-
-	// ###############################################################
-	// Rotate color
-	// ###############################################################
-	if (t.seconds() > 0.0333f) {
-		RGBAColor color = myentity->sprite()->color;
-		myentity->sprite()->color = Color::rotate(color, 0.01f);
-		t.start();
-	}
+    return 0;
 }

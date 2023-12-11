@@ -169,6 +169,27 @@ IF(MAKE_START)
 	)
 ENDIF()
 
+
+IF(MAKE_START)
+	add_executable(blockdoku
+		Blockdoku/main.cpp
+		Blockdoku/blockdoku.cpp
+		Blockdoku/blockdoku.h
+		Blockdoku/cell.cpp
+		Blockdoku/cell.h
+		Blockdoku/block.cpp
+		Blockdoku/block.h
+	)
+	target_link_libraries(blockdoku
+		${ALL_GRAPHICS_LIBS}
+	)
+	# Copy assets to the build directory
+	file(
+		COPY blockdoku/assets
+		DESTINATION ${CMAKE_BINARY_DIR}
+	)
+ENDIF()
+
 ####################################################################
 # demo                                                             #
 ####################################################################
