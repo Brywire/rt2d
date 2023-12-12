@@ -4,7 +4,6 @@
 
 Blockdoku::Blockdoku()
 {
-    // addChild(&puzzlefield);
     grid = std::vector<Cell*>();
 
     for (size_t y = 0; y < 9; y++) {
