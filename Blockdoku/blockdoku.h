@@ -5,6 +5,7 @@
 #include <rt2d/canvas.h>
 #include "cell.h"
 #include "block.h"
+#include <rt2d/timer.h>
 
 class Blockdoku : public Scene
 {
@@ -13,8 +14,13 @@ class Blockdoku : public Scene
         virtual ~Blockdoku();
 
         virtual void update(float deltaTime);
+        void checkVerticalLines();
+        void checkHorizontalLines();
 
         std::vector<Cell*> grid;
+    private:
+    double solveDelay = 1.0;
+    Timer* timer;
 };
 
 #endif
