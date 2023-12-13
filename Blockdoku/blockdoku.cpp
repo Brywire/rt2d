@@ -29,7 +29,7 @@ Blockdoku::~Blockdoku()
 void Blockdoku::update(float deltaTime)
 {
     //Getting the mouse input on click
-    if (input()->getMouseDown(0))
+    if (input()->getMouseDown(0) && timer->seconds()== 0)
     {
         //Getting mouse position and converting into grid coordinates
         int mouseX = input()->getMouseX();
@@ -52,16 +52,35 @@ void Blockdoku::update(float deltaTime)
 
             //Call the solve function after a click
             
-            //checkThreeByThree
+        
         }
     }
-    checkHorizontalLines();
-    checkVerticalLines();
+    
+    std::vector<std::vector<size_t>> busyHorizontal{checkHorizontalLines()};
+    std::vector<std::vector<size_t>> busyVertical{checkVerticalLines()};
+    //checkThreeByThree
+
+    if(timer->seconds()== 0 && (busyHorizontal.size() || busyVertical.size()))
+    {
+        timer->start();
+        transitionSolveLines(busyHorizontal);
+        transitionSolveLines(busyVertical);
+    }
+    
+
+    if(timer->seconds()>= 1)
+    {
+        solveLines(busyHorizontal);
+        solveLines(busyVertical);
+        timer->stop();
+    }
+    //solveThreeByThree
 }
 
-void Blockdoku::checkHorizontalLines()
+std::vector<std::vector<size_t>> Blockdoku::checkHorizontalLines()
 {
-    // Check for busy horizontal lines
+    std::vector<std::vector<size_t>> busyCells{};
+
     for (size_t y = 0; y < 9; y++)
     {
         bool isLineBusy = true;
@@ -78,21 +97,23 @@ void Blockdoku::checkHorizontalLines()
             }
         }
         
-        // If the entire line is busy, set the color back to white
+        //If line is busy, add to Vector
         if (isLineBusy)
         {
             for (size_t x = 0; x < 9; x++)
             {
-                grid[y * 9 + x]->sprite()->color = WHITE;
-                grid[y * 9 + x]->isBusy = false;
+                busyCells.push_back(std::vector<size_t>{x,y});
             }
         }
     }
+
+    return busyCells;
 }
 
-void Blockdoku::checkVerticalLines()
+std::vector<std::vector<size_t>> Blockdoku::checkVerticalLines()
 {
-    // Check for busy vertical lines
+    std::vector<std::vector<size_t>> busyCells{};
+    
     for (size_t x = 0; x < 9; x++)
     {
         bool isLineBusy = true;
@@ -112,11 +133,31 @@ void Blockdoku::checkVerticalLines()
         // If the entire line is busy, set the color back to white
         if (isLineBusy)
         {
+
             for (size_t y = 0; y < 9; y++)
             {
-                grid[y * 9 + x]->sprite()->color = WHITE;
-                grid[y * 9 + x]->isBusy = false;
+                busyCells.push_back(std::vector<size_t>{x,y});
             }
+            
         }
+    }
+
+    return busyCells;
+}
+
+void Blockdoku::solveLines(std::vector<std::vector<size_t>> busyCells)
+{
+    for (const std::vector<size_t> & busyCell:busyCells)
+    {
+        grid[busyCell[1] * 9 + busyCell[0]]->sprite()->color = WHITE;
+        grid[busyCell[1] * 9 + busyCell[0]]->isBusy = false;
+    }
+}
+
+void Blockdoku::transitionSolveLines(std::vector<std::vector<size_t>> busyCells)
+{
+    for (const std::vector<size_t> & busyCell:busyCells)
+    {
+        grid[busyCell[1] * 9 + busyCell[0]]->sprite()->color = GREEN;
     }
 }

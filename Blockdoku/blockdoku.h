@@ -14,8 +14,10 @@ class Blockdoku : public Scene
         virtual ~Blockdoku();
 
         virtual void update(float deltaTime);
-        void checkVerticalLines();
-        void checkHorizontalLines();
+        std::vector<std::vector<size_t>> checkVerticalLines();
+        std::vector<std::vector<size_t>> checkHorizontalLines();
+        void solveLines(std::vector<std::vector<size_t>> busyCells);
+        void transitionSolveLines(std::vector<std::vector<size_t>> busyCells);
 
         std::vector<Cell*> grid;
     private:
