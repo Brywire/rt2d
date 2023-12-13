@@ -11,6 +11,7 @@ public:
 	Cell();
 	virtual ~Cell();
 
+	bool isBusy;  //Adding a bool to the cell
 private:
 	virtual void update(float deltaTime);
 };
