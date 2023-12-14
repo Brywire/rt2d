@@ -14,11 +14,7 @@ Blockdoku::Blockdoku()
             grid.push_back(c);
             timer = new Timer;
         }
-        
     }
-
-    
-    
 }
 
 Blockdoku::~Blockdoku()
@@ -29,7 +25,7 @@ Blockdoku::~Blockdoku()
 void Blockdoku::update(float deltaTime)
 {
     //Getting the mouse input on click
-    if (input()->getMouseDown(0) && timer->seconds()== 0)
+    if (input()->getMouseDown(0) && !isAnimPlaying)
     {
         //Getting mouse position and converting into grid coordinates
         int mouseX = input()->getMouseX();
@@ -48,23 +44,21 @@ void Blockdoku::update(float deltaTime)
             clickedCell->sprite()->color = BLUE;
 
             //Make the cell busy
-            clickedCell->isBusy = !clickedCell->isBusy;
-
-            //Call the solve function after a click
-            
-        
+            clickedCell->isBusy = true;
         }
     }
     
     std::vector<std::vector<size_t>> busyHorizontal{checkHorizontalLines()};
     std::vector<std::vector<size_t>> busyVertical{checkVerticalLines()};
-    //checkThreeByThree
+    std::vector<std::vector<size_t>> busyThrees{checkThrees()};
 
-    if(timer->seconds()== 0 && (busyHorizontal.size() || busyVertical.size()))
+    if(!isAnimPlaying && (busyHorizontal.size() || busyVertical.size() || busyThrees.size()))
     {
         timer->start();
+        isAnimPlaying = true;
         transitionSolveLines(busyHorizontal);
         transitionSolveLines(busyVertical);
+        transitionSolveThrees(busyThrees);
     }
     
 
@@ -72,9 +66,12 @@ void Blockdoku::update(float deltaTime)
     {
         solveLines(busyHorizontal);
         solveLines(busyVertical);
+        solveThrees(busyThrees);
         timer->stop();
+        isAnimPlaying = false;
     }
-    //solveThreeByThree
+
+    
 }
 
 std::vector<std::vector<size_t>> Blockdoku::checkHorizontalLines()
@@ -100,6 +97,7 @@ std::vector<std::vector<size_t>> Blockdoku::checkHorizontalLines()
         //If line is busy, add to Vector
         if (isLineBusy)
         {
+            std::cout<<y<<std::endl;
             for (size_t x = 0; x < 9; x++)
             {
                 busyCells.push_back(std::vector<size_t>{x,y});
@@ -160,4 +158,74 @@ void Blockdoku::transitionSolveLines(std::vector<std::vector<size_t>> busyCells)
     {
         grid[busyCell[1] * 9 + busyCell[0]]->sprite()->color = GREEN;
     }
+}
+
+void Blockdoku::solveThrees(std::vector<std::vector<size_t>> busyCells)
+{
+    for (const std::vector<size_t> & busyCell:busyCells)
+    {
+        for (size_t y{busyCell[1]}; y < busyCell[1] + 3; y++) 
+        {
+            // Iterate rows in sets of 3.
+            for (size_t x{busyCell[0]}; x < busyCell[0] + 3; x++) 
+            {
+                grid[y * 9 + x]->sprite()->color = WHITE;
+                grid[y * 9 + x]->isBusy = false;
+            }
+        }
+    }
+}
+
+//transitionSolveThrees
+void Blockdoku::transitionSolveThrees(std::vector<std::vector<size_t>> busyCells)
+{
+    for (const std::vector<size_t> & busyCell:busyCells)
+    {
+        for (size_t y{busyCell[1]}; y < busyCell[1] + 3; y++) 
+        {
+            // Iterate rows in sets of 3.
+            for (size_t x{busyCell[0]}; x < busyCell[0] + 3; x++) 
+            {
+                grid[y * 9 + x]->sprite()->color = GREEN;
+            }
+        }
+    }
+}
+
+std::vector<std::vector<size_t>> Blockdoku::checkThrees() 
+{
+  std::vector<std::vector<size_t>> busyCells{};
+
+  // Iterate columns in sets of 3.
+  for (size_t y{0}; y < 9; y += 3) {
+    // Iterate rows in sets of 3.
+    for (size_t x{0}; x < 9; x += 3) {
+      bool isLineBusy{true};
+
+      // Iterate columns within the current set of 3.
+      for (size_t currentCol{y}; currentCol < y + 3; ++currentCol) 
+      {
+        // Iterate rows within the current set of 3.
+        for (size_t currentRow{x}; currentRow < x + 3; ++currentRow) 
+        {
+          Cell* currentCell = grid[currentCol * 9 + currentRow];
+
+            // Check if the cell is not busy
+            if (!currentCell->isBusy)
+            {
+                isLineBusy = false;
+                break;  // Break the loop if a non-busy cell is found
+            }
+        }
+
+        if (!isLineBusy) break;
+      }
+      
+      if (isLineBusy) {
+        busyCells.push_back(std::vector<size_t>{x, y});
+      }
+    }
+  }
+  
+  return busyCells;
 }

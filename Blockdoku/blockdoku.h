@@ -14,15 +14,21 @@ class Blockdoku : public Scene
         virtual ~Blockdoku();
 
         virtual void update(float deltaTime);
-        std::vector<std::vector<size_t>> checkVerticalLines();
-        std::vector<std::vector<size_t>> checkHorizontalLines();
-        void solveLines(std::vector<std::vector<size_t>> busyCells);
-        void transitionSolveLines(std::vector<std::vector<size_t>> busyCells);
+        
 
         std::vector<Cell*> grid;
     private:
     double solveDelay = 1.0;
     Timer* timer;
+    bool isAnimPlaying{false};
+
+    std::vector<std::vector<size_t>> checkVerticalLines();
+    std::vector<std::vector<size_t>> checkHorizontalLines();
+    std::vector<std::vector<size_t>> checkThrees();
+    void solveLines(std::vector<std::vector<size_t>> busyCells);
+    void transitionSolveLines(std::vector<std::vector<size_t>> busyCells);
+    void solveThrees(std::vector<std::vector<size_t>> busyCells);
+    void transitionSolveThrees(std::vector<std::vector<size_t>> busyCells);
 };
 
 #endif
