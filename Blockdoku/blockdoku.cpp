@@ -3,12 +3,32 @@
 
 Blockdoku::Blockdoku()
 {
-    
+    /*
+    - TODO: Live score count (text)
+    - TODO: Add to score count (depending on how many cells are busy)
+    - TODO: Make tetris blocks (collection of cells, needs to be draggable)
+    - TODO: Make blocks cells busy on placement (replacing current clicksystem)
+    - TODO: Knows when you can't place a block > game over > show score/highscore
+    */
+
     grid = std::vector<Cell*>();
 
     for (size_t y = 0; y < 9; y++) {
-        for (size_t x = 0; x < 9; x++) {
-            Cell* c = new Cell();
+        for (size_t x = 0; x < 9; x++) 
+        {
+            Cell* c;
+            if (
+                ((x >= 3 && x < 6) && (y < 3 || y >= 6))
+                || ((x < 3 || x >= 6) && (y >= 3 && y < 6))
+            ) 
+            {
+                c = new Cell(GRAY);
+            } 
+            else 
+            {
+                c = new Cell(WHITE);
+            }   
+        
             c->position = Vector2(x*64+100, y*64+100);
             this->addChild(c);
             grid.push_back(c);
@@ -56,17 +76,17 @@ void Blockdoku::update(float deltaTime)
     {
         timer->start();
         isAnimPlaying = true;
-        transitionSolveLines(busyHorizontal);
-        transitionSolveLines(busyVertical);
-        transitionSolveThrees(busyThrees);
+        solveLines(busyHorizontal);
+        solveLines(busyVertical);
+        solveThrees(busyThrees);
     }
     
 
     if(timer->seconds()>= 1)
     {
-        solveLines(busyHorizontal);
-        solveLines(busyVertical);
-        solveThrees(busyThrees);
+        solveLines(busyHorizontal, true);
+        solveLines(busyVertical, true);
+        solveThrees(busyThrees, true);
         timer->stop();
         isAnimPlaying = false;
     }
@@ -97,7 +117,6 @@ std::vector<std::vector<size_t>> Blockdoku::checkHorizontalLines()
         //If line is busy, add to Vector
         if (isLineBusy)
         {
-            std::cout<<y<<std::endl;
             for (size_t x = 0; x < 9; x++)
             {
                 busyCells.push_back(std::vector<size_t>{x,y});
@@ -143,41 +162,23 @@ std::vector<std::vector<size_t>> Blockdoku::checkVerticalLines()
     return busyCells;
 }
 
-void Blockdoku::solveLines(std::vector<std::vector<size_t>> busyCells)
+void Blockdoku::solveLines(std::vector<std::vector<size_t>> busyCells, const bool endTransition)
 {
     for (const std::vector<size_t> & busyCell:busyCells)
     {
-        grid[busyCell[1] * 9 + busyCell[0]]->sprite()->color = WHITE;
-        grid[busyCell[1] * 9 + busyCell[0]]->isBusy = false;
-    }
-}
-
-void Blockdoku::transitionSolveLines(std::vector<std::vector<size_t>> busyCells)
-{
-    for (const std::vector<size_t> & busyCell:busyCells)
-    {
-        grid[busyCell[1] * 9 + busyCell[0]]->sprite()->color = GREEN;
-    }
-}
-
-void Blockdoku::solveThrees(std::vector<std::vector<size_t>> busyCells)
-{
-    for (const std::vector<size_t> & busyCell:busyCells)
-    {
-        for (size_t y{busyCell[1]}; y < busyCell[1] + 3; y++) 
+        if (endTransition)
         {
-            // Iterate rows in sets of 3.
-            for (size_t x{busyCell[0]}; x < busyCell[0] + 3; x++) 
-            {
-                grid[y * 9 + x]->sprite()->color = WHITE;
-                grid[y * 9 + x]->isBusy = false;
-            }
+            grid[busyCell[1] * 9 + busyCell[0]]->sprite()->color =  grid[busyCell[1] * 9 + busyCell[0]]->defaultColor;
+            grid[busyCell[1] * 9 + busyCell[0]]->isBusy = false;
+        }
+        else
+        {
+            grid[busyCell[1] * 9 + busyCell[0]]->sprite()->color = GREEN;
         }
     }
 }
 
-//transitionSolveThrees
-void Blockdoku::transitionSolveThrees(std::vector<std::vector<size_t>> busyCells)
+void Blockdoku::solveThrees(std::vector<std::vector<size_t>> busyCells, const bool endTransition)
 {
     for (const std::vector<size_t> & busyCell:busyCells)
     {
@@ -186,7 +187,15 @@ void Blockdoku::transitionSolveThrees(std::vector<std::vector<size_t>> busyCells
             // Iterate rows in sets of 3.
             for (size_t x{busyCell[0]}; x < busyCell[0] + 3; x++) 
             {
-                grid[y * 9 + x]->sprite()->color = GREEN;
+                if (endTransition)
+                {
+                    grid[y * 9 + x]->sprite()->color = grid[y * 9 + x]->defaultColor;
+                    grid[y * 9 + x]->isBusy = false;
+                }
+                else
+                {
+                   grid[y * 9 + x]->sprite()->color = GREEN; 
+                }
             }
         }
     }

@@ -2,12 +2,12 @@
 
 #include "cell.h"
 
-Cell::Cell()
+Cell::Cell(const RGBAColor defaultColor)
 	: Entity(),
-	 isBusy(false)  // Initialize isBusy to false
+	 isBusy(false), defaultColor{defaultColor}  // Initialize isBusy to false
 {
 	this->addSprite("assets/blockSprite.tga");
-	this->sprite()->color = WHITE;
+	this->sprite()->color = defaultColor;
 }
 
 Cell::~Cell()

@@ -25,10 +25,8 @@ class Blockdoku : public Scene
     std::vector<std::vector<size_t>> checkVerticalLines();
     std::vector<std::vector<size_t>> checkHorizontalLines();
     std::vector<std::vector<size_t>> checkThrees();
-    void solveLines(std::vector<std::vector<size_t>> busyCells);
-    void transitionSolveLines(std::vector<std::vector<size_t>> busyCells);
-    void solveThrees(std::vector<std::vector<size_t>> busyCells);
-    void transitionSolveThrees(std::vector<std::vector<size_t>> busyCells);
+    void solveLines(std::vector<std::vector<size_t>> busyCells, const bool endTransition = false);
+    void solveThrees(std::vector<std::vector<size_t>> busyCells, const bool endTransition = false);
 };
 
 #endif
