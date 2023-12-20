@@ -35,6 +35,12 @@ Blockdoku::Blockdoku()
             timer = new Timer;
         }
     }
+
+    text = new Text();
+    text->position = Vector2(650, 50);
+    text->scale = Vector2(0.6f, 0.6f);
+    text->rotation.z = PI / 8;
+    addChild(text);
 }
 
 Blockdoku::~Blockdoku()
@@ -91,6 +97,10 @@ void Blockdoku::update(float deltaTime)
         isAnimPlaying = false;
     }
 
+    int score = 42;
+    std::stringstream scoretext;
+    scoretext << "Score: " << score;
+    text->message(scoretext.str());
     
 }
 
