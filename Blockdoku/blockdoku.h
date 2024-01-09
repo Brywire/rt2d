@@ -23,10 +23,12 @@ private:
     Timer* timer;
     bool isAnimPlaying{false};
     Text* text;
+    int score = 0;
 
     std::vector<std::vector<size_t>> checkVerticalLines();
     std::vector<std::vector<size_t>> checkHorizontalLines();
     std::vector<std::vector<size_t>> checkThrees();
+    void scoreCount();
     void solveLines(std::vector<std::vector<size_t>> busyCells, const bool endTransition = false);
     void solveThrees(std::vector<std::vector<size_t>> busyCells, const bool endTransition = false);
 };
