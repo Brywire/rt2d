@@ -37,7 +37,7 @@ Blockdoku::Blockdoku()
     }
 
     text = new Text();
-    text->position = Vector2(650, 50);
+    text->position = Vector2(850, 100);
     text->scale = Vector2(0.6f, 0.6f);
     addChild(text);
     
@@ -88,13 +88,26 @@ void Blockdoku::update(float deltaTime)
     }
     
 
-    if(timer->seconds()>= 1)
+    if(timer->seconds() >= 1)
     {
         solveLines(busyHorizontal, true);
         solveLines(busyVertical, true);
         solveThrees(busyThrees, true);
-        timer->stop();
         isAnimPlaying = false;
+
+        // handle score
+        size_t subscore = busyHorizontal.size() + busyVertical.size() + busyThrees.size();
+        if(subscore == 9) {score += 9;}
+        if(subscore == 18) {score += 36;}
+        if(subscore == 27) {score += 81;}
+
+        // for (size_t i = 0; i < busyThrees.size(); i++)
+        // {
+        //     std::cout << busyThrees[0].size() << std::endl;
+        // }
+        
+
+        timer->stop();
     }
 
     
@@ -157,7 +170,7 @@ std::vector<std::vector<size_t>> Blockdoku::checkVerticalLines()
         // If the entire line is busy, set the color back to white
         if (isLineBusy)
         {
-
+            score += 9;
             for (size_t y = 0; y < 9; y++)
             {
                 busyCells.push_back(std::vector<size_t>{x,y});
@@ -171,7 +184,7 @@ std::vector<std::vector<size_t>> Blockdoku::checkVerticalLines()
 
 void Blockdoku::solveLines(std::vector<std::vector<size_t>> busyCells, const bool endTransition)
 {
-    for (const std::vector<size_t> & busyCell:busyCells)
+    for (const std::vector<size_t> & busyCell : busyCells)
     {
         if (endTransition)
         {
@@ -251,5 +264,4 @@ void Blockdoku::scoreCount()
     std::stringstream scoretext;
     scoretext << "Score: " << score;
     text->message(scoretext.str());
-    score ++;
 }
