@@ -18,6 +18,7 @@ public:
     
 
     std::vector<Cell*> grid;
+    size_t cellsCleared = 0;
 private:
     double solveDelay = 1.0;
     Timer* timer;
