@@ -4,8 +4,7 @@
 Blockdoku::Blockdoku()
 {
     /*
-    - TODO: Live score count (text)
-    - TODO: Add to score count (depending on how many cells are busy)
+    - TODO: Keep track of Highscore (out of game)
     - TODO: Make tetris blocks (collection of cells, needs to be draggable)
     - TODO: Make blocks cells busy on placement (replacing current clicksystem)
     - TODO: Knows when you can't place a block > game over > show score/highscore
@@ -92,24 +91,8 @@ void Blockdoku::update(float deltaTime)
         isAnimPlaying = false;
 
         // handle score
-        size_t subscore = busyHorizontal.size() + busyVertical.size() + busyThrees.size();
-        if (subscore == 9)
-        {
-            score += 9;
-        }
-        if (subscore == 18)
-        {
-            score += 36;
-        }
-        if (subscore == 27)
-        {
-            score += 81;
-        }
-
-        // for (size_t i = 0; i < busyThrees.size(); i++)
-        // {
-        //     std::cout << busyThrees[0].size() << std::endl;
-        // }
+        size_t subscore = busyHorizontal.size() + busyVertical.size() + busyThrees.size() * 9;
+        score += (subscore / 9) * subscore;
 
         timer->stop();
     }
