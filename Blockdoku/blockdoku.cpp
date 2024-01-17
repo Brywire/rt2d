@@ -1,5 +1,8 @@
 #include "blockdoku.h"
 #include <rt2d/timer.h>
+#include <system_error>
+
+
 
 Blockdoku::Blockdoku()
 {
@@ -34,10 +37,17 @@ Blockdoku::Blockdoku()
         }
     }
 
+    highscoretext = new Text();
+    highscoretext->position = Vector2(850, 100);
+    highscoretext->scale = Vector2(0.6f, 0.6f);
+    addChild(highscoretext);
+    highscore = 0;
+
     text = new Text();
-    text->position = Vector2(850, 100);
+    text->position = Vector2(850, 150);
     text->scale = Vector2(0.6f, 0.6f);
     addChild(text);
+    score = 0;
 }
 
 Blockdoku::~Blockdoku()
@@ -93,6 +103,12 @@ void Blockdoku::update(float deltaTime)
         // handle score
         size_t subscore = busyHorizontal.size() + busyVertical.size() + busyThrees.size() * 9;
         score += (subscore / 9) * subscore;
+
+        // update highscore
+        if (score > highscore)
+        {
+            highscore = score;
+        }
 
         timer->stop();
     }
@@ -252,4 +268,8 @@ void Blockdoku::scoreCount()
     std::stringstream scoretext;
     scoretext << "Score: " << score;
     text->message(scoretext.str());
+
+    std::stringstream highscoreText;
+    highscoreText << "Highscore: " << highscore;
+    highscoretext->message(highscoreText.str());
 }

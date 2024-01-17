@@ -24,7 +24,9 @@ private:
     Timer* timer;
     bool isAnimPlaying{false};
     Text* text;
-    int score = 0;
+    Text* highscoretext;
+    int score;
+    int highscore;
 
     std::vector<std::vector<size_t>> checkVerticalLines();
     std::vector<std::vector<size_t>> checkHorizontalLines();
