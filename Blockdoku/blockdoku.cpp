@@ -3,12 +3,9 @@
 #include <system_error>
 #include <fstream>
 
-
-
 Blockdoku::Blockdoku()
 {
     /*
-    - TODO: Keep track of Highscore (out of game)
     - TODO: Make tetris blocks (collection of cells, needs to be draggable)
     - TODO: Make blocks cells busy on placement (replacing current clicksystem)
     - TODO: Knows when you can't place a block > game over > show score/highscore
@@ -42,7 +39,16 @@ Blockdoku::Blockdoku()
     highscoretext->position = Vector2(850, 100);
     highscoretext->scale = Vector2(0.6f, 0.6f);
     addChild(highscoretext);
-    highscore = 0;
+
+    std::ifstream input("highscore.txt");
+    if (input.good())
+    {
+        input >> highscore;
+    }
+    else
+    {
+        highscore = 0;
+    }
 
     text = new Text();
     text->position = Vector2(850, 150);
@@ -105,11 +111,10 @@ void Blockdoku::update(float deltaTime)
         size_t subscore = busyHorizontal.size() + busyVertical.size() + busyThrees.size() * 9;
         score += (subscore / 9) * subscore;
 
-
-        std::ifstream input ("highscore.txt");
+        std::ifstream input("highscore.txt");
         input >> highscore;
 
-        std::ofstream output ("highscore.txt");
+        std::ofstream output("highscore.txt");
         if (score > highscore)
         {
             output << score;
@@ -118,7 +123,6 @@ void Blockdoku::update(float deltaTime)
         {
             output << highscore;
         }
-
 
         timer->stop();
     }
