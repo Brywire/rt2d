@@ -1,6 +1,7 @@
 #include "blockdoku.h"
 #include <rt2d/timer.h>
 #include <system_error>
+#include <fstream>
 
 
 
@@ -104,11 +105,20 @@ void Blockdoku::update(float deltaTime)
         size_t subscore = busyHorizontal.size() + busyVertical.size() + busyThrees.size() * 9;
         score += (subscore / 9) * subscore;
 
-        // update highscore
+
+        std::ifstream input ("highscore.txt");
+        input >> highscore;
+
+        std::ofstream output ("highscore.txt");
         if (score > highscore)
         {
-            highscore = score;
+            output << score;
         }
+        else
+        {
+            output << highscore;
+        }
+
 
         timer->stop();
     }
