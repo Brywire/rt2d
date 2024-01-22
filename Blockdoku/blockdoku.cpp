@@ -6,8 +6,12 @@
 Blockdoku::Blockdoku()
 {
     /*
-    - TODO: Make tetris blocks (collection of cells, needs to be draggable)
-    - TODO: Make blocks cells busy on placement (replacing current clicksystem)
+    - TODO: Make single draggable block on the side
+    - TODO: Make block turn cells busy on placement (replacing current clicksystem)
+    - TODO: Combine blocks into tetris shapes
+    - TODO: Rotate on spawn
+    - TODO: Have 3 blocks on the screen
+    - TODO: Give 3 new blocks after old blocks are used
     - TODO: Knows when you can't place a block > game over > show score/highscore
     */
 
@@ -111,23 +115,24 @@ void Blockdoku::update(float deltaTime)
         size_t subscore = busyHorizontal.size() + busyVertical.size() + busyThrees.size() * 9;
         score += (subscore / 9) * subscore;
 
-        std::ifstream input("highscore.txt");
-        input >> highscore;
-
-        std::ofstream output("highscore.txt");
-        if (score > highscore)
-        {
-            output << score;
-        }
-        else
-        {
-            output << highscore;
-        }
-
+        
         timer->stop();
     }
 
     scoreCount();
+
+    std::ifstream input("highscore.txt");
+    input >> highscore;
+
+    std::ofstream output("highscore.txt");
+    if (score > highscore)
+    {
+        output << score;
+    }
+    else
+    {
+        output << highscore;
+    }
 }
 
 std::vector<std::vector<size_t>> Blockdoku::checkHorizontalLines()

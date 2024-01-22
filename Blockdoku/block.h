@@ -4,6 +4,7 @@
 #define BLOCK_H
 
 #include <rt2d/entity.h>
+#include <rt2d/color.h>
 
 class Block: public Entity
 {
