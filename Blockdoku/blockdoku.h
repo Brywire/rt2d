@@ -19,6 +19,7 @@ public:
     
 
     std::vector<Cell*> grid;
+    Block* block;
     size_t cellsCleared = 0;
 private:
     double solveDelay = 1.0;

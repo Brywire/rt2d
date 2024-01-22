@@ -59,6 +59,9 @@ Blockdoku::Blockdoku()
     text->scale = Vector2(0.6f, 0.6f);
     addChild(text);
     score = 0;
+
+    block = new Block();
+    block->spawnBlock();
 }
 
 Blockdoku::~Blockdoku()
