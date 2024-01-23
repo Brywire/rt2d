@@ -5,8 +5,8 @@
 Block::Block()
 	: Entity()
 {
-	this->addSprite("assets/blockSprite.tga");
-	this->sprite()->color = BLUE;
+	//this->addSprite("assets/blockSprite.tga");
+	//this->sprite()->color = BLUE;
 }
 
 void Block::spawnBlock()
@@ -22,9 +22,12 @@ void Block::spawnBlock()
 
 			c = new Cell(WHITE);
 
-			c->position = Vector2(x * 64 + 0, y * 64 + 0);
+			c->position = Vector2(x * 64 + 700, y * 64 + 292);
 			this->addChild(c);
 			grid.push_back(c);
+			
+			c->gridPos.x = x;
+            c->gridPos.y = y;
 		}
 	}
 

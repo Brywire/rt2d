@@ -12,6 +12,8 @@ public:
 	Cell(const RGBAColor defaultColor);
 	virtual ~Cell();
 
+	Vector2 gridPos;
+
 	const RGBAColor defaultColor;
 	bool isBusy;  //Adding a bool to the cell
 private:

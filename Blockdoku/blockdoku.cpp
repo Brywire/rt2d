@@ -32,6 +32,9 @@ Blockdoku::Blockdoku()
                 c = new Cell(WHITE);
             }
 
+            c->gridPos.x = x;
+            c->gridPos.y = y;
+
             c->position = Vector2(x * 64 + 100, y * 64 + 100);
             this->addChild(c);
             grid.push_back(c);
@@ -62,6 +65,7 @@ Blockdoku::Blockdoku()
 
     block = new Block();
     block->spawnBlock();
+    addChild(block);
 }
 
 Blockdoku::~Blockdoku()
