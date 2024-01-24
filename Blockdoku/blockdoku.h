@@ -8,7 +8,6 @@
 #include "block.h"
 #include <rt2d/timer.h>
 
-
 class Blockdoku : public Scene
 {
 public:
@@ -16,19 +15,22 @@ public:
     virtual ~Blockdoku();
 
     virtual void update(float deltaTime);
-    
 
-    std::vector<Cell*> grid;
-    Block* block;
+    std::vector<Cell *> grid;
+    Block *block;
     size_t cellsCleared = 0;
+
 private:
     double solveDelay = 1.0;
-    Timer* timer;
+    Timer *timer;
     bool isAnimPlaying{false};
-    Text* text;
-    Text* highscoretext;
+
+    Text *text;
+    Text *highscoretext;
     int score;
     int highscore;
+
+    void dragShape(Block *b);
 
     std::vector<std::vector<size_t>> checkVerticalLines();
     std::vector<std::vector<size_t>> checkHorizontalLines();

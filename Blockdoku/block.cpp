@@ -7,11 +7,12 @@ Block::Block()
 {
 	//this->addSprite("assets/blockSprite.tga");
 	//this->sprite()->color = BLUE;
+	this->position = Vector2(700, 292);
 }
 
 void Block::spawnBlock()
 {
-
+	//TODO draw cells from the middle
 	grid = std::vector<Cell *>();
 
 	for (size_t y = 0; y < 3; y++)
@@ -22,7 +23,7 @@ void Block::spawnBlock()
 
 			c = new Cell(WHITE);
 
-			c->position = Vector2(x * 64 + 700, y * 64 + 292);
+			c->position = Vector2(x * 64, y * 64);
 			this->addChild(c);
 			grid.push_back(c);
 			

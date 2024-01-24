@@ -3,7 +3,7 @@
 #include <system_error>
 #include <fstream>
 
-Blockdoku::Blockdoku()
+Blockdoku::Blockdoku() : Scene()
 {
     /*
     - TODO: Make single draggable block on the side
@@ -66,15 +66,49 @@ Blockdoku::Blockdoku()
     block = new Block();
     block->spawnBlock();
     addChild(block);
+
 }
 
 Blockdoku::~Blockdoku()
 {
 }
 
+void Blockdoku::dragShape(Block *b)
+{
+    
+    int mouseX = input()->getMouseX();
+    int mouseY = input()->getMouseY();
+
+    int blockX = b->position.x - 32;
+    int blockY = b->position.y - 32;
+    int blockRight = b->position.x + 160;
+    int blockBottom = b->position.y + 160;
+
+
+    b->grid[4]->sprite()->color = WHITE;
+
+    if (mouseX > blockX &&
+        mouseX < blockRight &&
+        mouseY > blockY &&
+        mouseY < blockBottom)
+    {
+        b->grid[4]->sprite()->color = MAGENTA;
+       
+
+        if(input()->getMouse(0))
+        {
+            b->position.x = mouseX;
+            b->position.y = mouseY;
+        }
+    }
+
+    
+}
+
 void Blockdoku::update(float deltaTime)
 {
-    // Getting the mouse input on click
+    dragShape(block);
+    // Tracking mouse DOWN event
     if (input()->getMouseDown(0) && !isAnimPlaying)
     {
         // Getting mouse position and converting into grid coordinates
@@ -122,7 +156,6 @@ void Blockdoku::update(float deltaTime)
         size_t subscore = busyHorizontal.size() + busyVertical.size() + busyThrees.size() * 9;
         score += (subscore / 9) * subscore;
 
-        
         timer->stop();
     }
 

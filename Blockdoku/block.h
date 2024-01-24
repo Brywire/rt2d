@@ -16,8 +16,8 @@ public:
 	virtual ~Block();
 
 	void spawnBlock();
-private:
 	std::vector<Cell*> grid;
+private:
 	virtual void update(float deltaTime);
 };
 
