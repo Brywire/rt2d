@@ -8,6 +8,7 @@ Block::Block()
 	//this->addSprite("assets/blockSprite.tga");
 	//this->sprite()->color = BLUE;
 	this->position = Vector2(700, 292);
+	this->initialBlockPosition = position;
 }
 
 void Block::spawnBlock()
@@ -42,4 +43,15 @@ Block::~Block()
 void Block::update(float deltaTime)
 {
 
+}
+
+void Block::Boundry()
+{
+    if (this->position.x > SWIDTH + 64 || 
+	this->position.y > SHEIGHT + 64 || 
+	this->position.x < -64 || 
+	this->position.y < -64)
+    {
+    position = initialBlockPosition;
+    }
 }

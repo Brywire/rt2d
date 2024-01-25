@@ -14,9 +14,11 @@ class Block: public Entity
 public:
 	Block();
 	virtual ~Block();
-
 	void spawnBlock();
 	std::vector<Cell*> grid;
+	void Block::Boundry();
+	Vector2 initialBlockPosition;
+
 private:
 	virtual void update(float deltaTime);
 };

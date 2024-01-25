@@ -97,8 +97,8 @@ void Blockdoku::dragShape(Block *b)
 
         if(input()->getMouse(0))
         {
-            b->position.x = mouseX;
-            b->position.y = mouseY;
+            b->position.x = mouseX - 64;
+            b->position.y = mouseY - 64;
         }
     }
 
@@ -108,6 +108,7 @@ void Blockdoku::dragShape(Block *b)
 void Blockdoku::update(float deltaTime)
 {
     dragShape(block);
+    block->Boundry();
     // Tracking mouse DOWN event
     if (input()->getMouseDown(0) && !isAnimPlaying)
     {
