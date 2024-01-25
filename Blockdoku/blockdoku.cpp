@@ -6,7 +6,6 @@
 Blockdoku::Blockdoku() : Scene()
 {
     /*
-    - TODO: Make single draggable block on the side
     - TODO: Make block turn cells busy on placement (replacing current clicksystem)
     - TODO: Combine blocks into tetris shapes
     - TODO: Rotate on spawn
@@ -85,14 +84,14 @@ void Blockdoku::dragShape(Block *b)
     int blockBottom = b->position.y + 160;
 
 
-    b->grid[4]->sprite()->color = WHITE;
+    b->grid[4]->sprite()->color = BLUE;
 
     if (mouseX > blockX &&
         mouseX < blockRight &&
         mouseY > blockY &&
         mouseY < blockBottom)
     {
-        b->grid[4]->sprite()->color = MAGENTA;
+        b->grid[4]->sprite()->color.a = 0;
        
 
         if(input()->getMouse(0))

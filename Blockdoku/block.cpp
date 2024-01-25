@@ -22,7 +22,7 @@ void Block::spawnBlock()
 		{
 			Cell *c;
 
-			c = new Cell(WHITE);
+			c = new Cell(BLUE);
 
 			c->position = Vector2(x * 64, y * 64);
 			this->addChild(c);
