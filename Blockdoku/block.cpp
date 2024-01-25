@@ -8,7 +8,7 @@ Block::Block()
 	//this->addSprite("assets/blockSprite.tga");
 	//this->sprite()->color = BLUE;
 	this->position = Vector2(700, 292);
-	this->initialBlockPosition = position;
+	this->initialBlockPosition = this->position;
 }
 
 void Block::spawnBlock()
@@ -47,11 +47,12 @@ void Block::update(float deltaTime)
 
 void Block::Boundry()
 {
-    if (this->position.x > SWIDTH + 64 || 
-	this->position.y > SHEIGHT + 64 || 
-	this->position.x < -64 || 
+    if (this->position.x > SWIDTH - 64|| 
+	this->position.y > SHEIGHT - 64|| 
+	this->position.x <  -64 || 
 	this->position.y < -64)
     {
-    position = initialBlockPosition;
+    	position = this->initialBlockPosition;
+		std::cout << "Out of Bounds" << std::endl;
     }
 }
